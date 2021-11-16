@@ -1,24 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
+import { Switch, Route, Redirect } from "react-router-dom";
+import LoginPage from "./pages/loginPage";
+import { useState } from "react";
+import Manager from "./pages/Manager";
 
 function App() {
+  const [currentRole, setCurrentRole] = useState(
+    localStorage.getItem("role") ? localStorage.getItem("role") : ""
+  );
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Switch>
+      <Route
+        path="/login"
+        component={() => <LoginPage setCurrentRole={setCurrentRole} />}
+      />
+      {currentRole === "manager" ? (
+        <Route path="/manager" component={() => <Manager />} />
+      ) : (
+        <Redirect to="/login" />
+      )}
+      <Redirect to="/login" />
+    </Switch>
   );
 }
 
