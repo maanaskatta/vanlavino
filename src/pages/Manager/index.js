@@ -20,6 +20,7 @@ import Cuisine from "../Manager/Cuisines";
 import Chefs from "./Chefs";
 import Coupons from "./Coupons";
 import Menu from "./Menu";
+import Customers from "./Customers";
 
 const managerTiles = [
   {
@@ -81,7 +82,7 @@ const managerTiles = [
     label: "Customers",
     path: "/customers",
     icon: () => <MdOutlineFeaturedPlayList />,
-    render: (label) => <p>{label}</p>,
+    render: (label) => <Customers label={label} />,
   },
   {
     label: "Daily Report",
