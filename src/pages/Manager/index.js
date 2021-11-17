@@ -16,25 +16,29 @@ import {
 } from "react-icons/md";
 import { Link, Redirect, Route, Switch, useHistory } from "react-router-dom";
 import Logo from "../../images/Logo.png";
+import Cuisine from "../Manager/Cuisines";
+import Chefs from "./Chefs";
+import Coupons from "./Coupons";
+import Menu from "./Menu";
 
 const managerTiles = [
   {
     label: "Chefs",
     path: "/chefs",
     icon: () => <GiChefToque />,
-    render: (label) => <p>{label}</p>,
+    render: (label) => <Chefs label={label} />,
   },
   {
     label: "Cuisines",
     path: "/cuisines",
     icon: () => <BiCategory />,
-    render: (label) => <p>{label}</p>,
+    render: (label) => <Cuisine label={label} />,
   },
   {
     label: "Menu",
     path: "/menu",
     icon: () => <MdOutlineRestaurantMenu />,
-    render: (label) => <p>{label}</p>,
+    render: (label) => <Menu label={label} />,
   },
   {
     label: "Orders",
@@ -71,7 +75,7 @@ const managerTiles = [
     label: "Coupons",
     path: "/coupons",
     icon: () => <AiOutlineReconciliation />,
-    render: (label) => <p>{label}</p>,
+    render: (label) => <Coupons label={label} />,
   },
   {
     label: "Customers",
@@ -179,7 +183,7 @@ export default function Manager() {
       <div className="flex w-full bg-blue-600">
         <HeaderNav />
       </div>
-      <div className="w-full flex flex-col p-4">
+      <div className="w-full flex flex-col">
         <Switch>
           {managerTiles.map((tile) => (
             <Route
