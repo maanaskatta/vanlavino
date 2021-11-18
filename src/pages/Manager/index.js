@@ -21,6 +21,7 @@ import Chefs from "./Chefs";
 import Coupons from "./Coupons";
 import Menu from "./Menu";
 import Customers from "./Customers";
+import Stewards from "./Stewards";
 
 const managerTiles = [
   {
@@ -112,7 +113,7 @@ const managerTiles = [
     label: "Stewards",
     path: "/stewards",
     icon: () => <HiOutlineSpeakerphone />,
-    render: (label) => <p>{label}</p>,
+    render: (label) => <Stewards label={label} />,
   },
 ];
 
