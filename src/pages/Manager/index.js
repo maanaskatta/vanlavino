@@ -23,6 +23,7 @@ import Menu from "./Menu";
 import Customers from "./Customers";
 import Stewards from "./Stewards";
 import Departments from "./Department";
+import Managers from "./Managers";
 
 const managerTiles = [
   {
@@ -59,7 +60,7 @@ const managerTiles = [
     label: "Managers",
     path: "/managers",
     icon: () => <FaTools />,
-    render: (label) => <p>{label}</p>,
+    render: (label) => <Managers label={label} />,
   },
 
   {
