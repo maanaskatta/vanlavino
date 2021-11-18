@@ -24,6 +24,7 @@ import Customers from "./Customers";
 import Stewards from "./Stewards";
 import Departments from "./Department";
 import Managers from "./Managers";
+import Events from "./Events";
 
 const managerTiles = [
   {
@@ -54,7 +55,7 @@ const managerTiles = [
     label: "Events",
     path: "/events",
     icon: () => <AiOutlineHistory />,
-    render: (label) => <p>{label}</p>,
+    render: (label) => <Events label={label} />,
   },
   {
     label: "Managers",
