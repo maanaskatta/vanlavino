@@ -26,6 +26,7 @@ import Departments from "./Department";
 import Managers from "./Managers";
 import Events from "./Events";
 import Reservations from "./TableReservations";
+import Orders from "./Orders";
 
 const managerTiles = [
   {
@@ -50,7 +51,7 @@ const managerTiles = [
     label: "Orders",
     path: "/orders",
     icon: () => <BiNotepad />,
-    render: (label) => <p>{label}</p>,
+    render: (label) => <Orders label={label} />,
   },
   {
     label: "Events",
@@ -64,7 +65,6 @@ const managerTiles = [
     icon: () => <FaTools />,
     render: (label) => <Managers label={label} />,
   },
-
   {
     label: "Department",
     path: "/department",
@@ -89,12 +89,12 @@ const managerTiles = [
     icon: () => <MdOutlineFeaturedPlayList />,
     render: (label) => <Customers label={label} />,
   },
-  {
-    label: "Daily Report",
-    path: "/dailyReport",
-    icon: () => <BsCardList />,
-    render: (label) => <p>{label}</p>,
-  },
+  // {
+  //   label: "Daily Report",
+  //   path: "/dailyReport",
+  //   icon: () => <BsCardList />,
+  //   render: (label) => <p>{label}</p>,
+  // },
   {
     label: "Salaries",
     path: "/salaries",
