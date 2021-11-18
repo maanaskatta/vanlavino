@@ -27,6 +27,7 @@ import Managers from "./Managers";
 import Events from "./Events";
 import Reservations from "./TableReservations";
 import Orders from "./Orders";
+import Salaries from "./Salaries";
 
 const managerTiles = [
   {
@@ -99,7 +100,7 @@ const managerTiles = [
     label: "Salaries",
     path: "/salaries",
     icon: () => <IoMdPhotos />,
-    render: (label) => <p>{label}</p>,
+    render: (label) => <Salaries label={label} />,
   },
   {
     label: "Reviews",
