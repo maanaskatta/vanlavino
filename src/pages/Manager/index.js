@@ -22,6 +22,7 @@ import Coupons from "./Coupons";
 import Menu from "./Menu";
 import Customers from "./Customers";
 import Stewards from "./Stewards";
+import Departments from "./Department";
 
 const managerTiles = [
   {
@@ -65,7 +66,7 @@ const managerTiles = [
     label: "Department",
     path: "/department",
     icon: () => <BiCategory />,
-    render: (label) => <p>{label}</p>,
+    render: (label) => <Departments label={label} />,
   },
   {
     label: "Table Reservations",
