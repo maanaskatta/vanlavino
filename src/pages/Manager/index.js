@@ -25,6 +25,7 @@ import Stewards from "./Stewards";
 import Departments from "./Department";
 import Managers from "./Managers";
 import Events from "./Events";
+import Reservations from "./TableReservations";
 
 const managerTiles = [
   {
@@ -71,10 +72,10 @@ const managerTiles = [
     render: (label) => <Departments label={label} />,
   },
   {
-    label: "Table Reservations",
+    label: "Reservations",
     path: "/reservations",
     icon: () => <FaCoins />,
-    render: (label) => <p>{label}</p>,
+    render: (label) => <Reservations label={label} />,
   },
   {
     label: "Coupons",
