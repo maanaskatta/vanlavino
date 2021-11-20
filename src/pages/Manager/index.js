@@ -1,34 +1,33 @@
 import React, { useState } from "react";
-import {
-  AiOutlineCar,
-  AiOutlineHistory,
-  AiOutlineReconciliation,
-} from "react-icons/ai";
+import { AiOutlineHistory } from "react-icons/ai";
 import { BiCategory, BiNotepad } from "react-icons/bi";
-import { BsCardList, BsReceipt } from "react-icons/bs";
-import { FaCoins, FaTools, FaUsers } from "react-icons/fa";
+import { FaCoins, FaPeopleCarry, FaUsers, FaUserTie } from "react-icons/fa";
 import { GiChefToque } from "react-icons/gi";
 import { HiOutlineSpeakerphone } from "react-icons/hi";
 import { IoMdPhotos } from "react-icons/io";
-import {
-  MdOutlineFeaturedPlayList,
-  MdOutlineRestaurantMenu,
-} from "react-icons/md";
+import { MdOutlineRestaurantMenu } from "react-icons/md";
+import { RiCouponLine } from "react-icons/ri";
 import { Link, Redirect, Route, Switch, useHistory } from "react-router-dom";
 import Logo from "../../images/Logo.png";
 import Cuisine from "../Manager/Cuisines";
 import Chefs from "./Chefs";
 import Coupons from "./Coupons";
-import Menu from "./Menu";
 import Customers from "./Customers";
-import Stewards from "./Stewards";
 import Departments from "./Department";
-import Managers from "./Managers";
 import Events from "./Events";
-import Reservations from "./TableReservations";
+import Managers from "./Managers";
+import Menu from "./Menu";
 import Orders from "./Orders";
-import Salaries from "./Salaries";
 import Reviews from "./Reviews";
+import Salaries from "./Salaries";
+import Staff from "./Staff";
+import Stewards from "./Stewards";
+import Reservations from "./TableReservations";
+import {
+  MdAttachMoney,
+  MdOutlineRateReview,
+  MdPeopleOutline,
+} from "react-icons/md";
 
 const managerTiles = [
   {
@@ -42,6 +41,12 @@ const managerTiles = [
     path: "/cuisines",
     icon: () => <BiCategory />,
     render: (label) => <Cuisine label={label} />,
+  },
+  {
+    label: "Staff",
+    path: "/staff",
+    icon: () => <FaPeopleCarry />,
+    render: (label) => <Staff label={label} />,
   },
   {
     label: "Menu",
@@ -64,9 +69,10 @@ const managerTiles = [
   {
     label: "Managers",
     path: "/managers",
-    icon: () => <FaTools />,
+    icon: () => <FaUserTie />,
     render: (label) => <Managers label={label} />,
   },
+
   {
     label: "Department",
     path: "/department",
@@ -82,13 +88,13 @@ const managerTiles = [
   {
     label: "Coupons",
     path: "/coupons",
-    icon: () => <AiOutlineReconciliation />,
+    icon: () => <RiCouponLine />,
     render: (label) => <Coupons label={label} />,
   },
   {
     label: "Customers",
     path: "/customers",
-    icon: () => <MdOutlineFeaturedPlayList />,
+    icon: () => <FaUsers />,
     render: (label) => <Customers label={label} />,
   },
   // {
@@ -100,25 +106,20 @@ const managerTiles = [
   {
     label: "Salaries",
     path: "/salaries",
-    icon: () => <IoMdPhotos />,
+    icon: () => <MdAttachMoney />,
     render: (label) => <Salaries label={label} />,
   },
   {
     label: "Reviews",
     path: "/reviews",
-    icon: () => <HiOutlineSpeakerphone />,
+    icon: () => <MdOutlineRateReview />,
     render: (label) => <Reviews label={label} />,
   },
-  {
-    label: "Staff",
-    path: "/staff",
-    icon: () => <HiOutlineSpeakerphone />,
-    render: (label) => <p>{label}</p>,
-  },
+
   {
     label: "Stewards",
     path: "/stewards",
-    icon: () => <HiOutlineSpeakerphone />,
+    icon: () => <MdPeopleOutline />,
     render: (label) => <Stewards label={label} />,
   },
 ];
