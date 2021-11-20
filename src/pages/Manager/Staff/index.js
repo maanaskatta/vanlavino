@@ -1,35 +1,28 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BsPencil } from "react-icons/bs";
 import { MdAddCircleOutline } from "react-icons/md";
 import { useTable } from "react-table";
 import Loading from "../../../components/Loading";
 import AddEditStaff from "./AddEditStaff";
-
-const fakeStaff = [
-  {
-    firstName: "Maanas",
-    lastName: "Katta",
-    phoneNumber: "9121012244",
-    DepartmentName: "House Keeping",
-  },
-];
+import getData from "../RouteControllers/getData";
 
 const Staff = ({ label }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [staffToBeEdited, setStaffToBeEdited] = useState(null);
-  const [staffCrew, setStaff] = useState(fakeStaff);
-  //   useEffect(() => {
-  //     setIsLoading(true);
-  //     getData("getChefs")
-  //       .then((data) => {
-  //         setChefs(data);
-  //         setIsLoading(false);
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //       });
-  //   }, [isModalOpen]);
+  const [staffCrew, setStaff] = useState(null);
+
+  useEffect(() => {
+    setIsLoading(true);
+    getData("getStaff")
+      .then((data) => {
+        setStaff(data);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [isModalOpen]);
 
   const edit = (staff) => {
     setStaffToBeEdited(staff);

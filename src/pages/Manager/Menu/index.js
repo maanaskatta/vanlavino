@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BiCategory, BiDish } from "react-icons/bi";
 import { BsPencil, BsTrash } from "react-icons/bs";
 import { MdAddCircleOutline } from "react-icons/md";
@@ -6,6 +6,9 @@ import Loading from "../../../components/Loading";
 import NoDataText from "../../../components/NoDataText";
 import AddEditItem from "./AddEditItem";
 import { IoMdPricetag } from "react-icons/io";
+import getData from "../RouteControllers/getData";
+import deleteData from "../RouteControllers/deleteData";
+import { toast } from "react-toastify";
 
 const fakeMenu = [
   {
@@ -24,17 +27,17 @@ const Items = ({ item }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [mutationInProgress, setMutationInProgress] = useState(false);
 
-  //   const deleteGate = async (data) => {
-  //     setMutationInProgress(true);
-  //     let res = await deleteData("deleteAccessGate", data);
-  //     if (res) {
-  //       toast.success("Access gate deleted successfully...");
-  //       setMutationInProgress(false);
-  //     } else {
-  //       toast.error("Failed to delete access gate!...");
-  //       setMutationInProgress(false);
-  //     }
-  //   };
+  const deleteItem = async (data) => {
+    setMutationInProgress(true);
+    let res = await deleteData("deleteItem", data);
+    if (res) {
+      toast.success("Item deleted successfully...");
+      setMutationInProgress(false);
+    } else {
+      toast.error("Failed to delete Item!...");
+      setMutationInProgress(false);
+    }
+  };
 
   return (
     <div className="flex flex-col gap-3 p-3 border bg-blue-200 rounded shadow-md">
@@ -61,11 +64,11 @@ const Items = ({ item }) => {
           className=" text-blue-900 text-xl cursor-pointer"
         />
         <BsTrash
-          //   onClick={() => {
-          //     deleteGate({
-          //       gateID: gate.gateID,
-          //     });
-          //   }}
+          onClick={() => {
+            deleteItem({
+              ItemID: item.ItemID,
+            });
+          }}
           className={`text-red-600 text-xl cursor-pointer ${
             mutationInProgress ? " animate-spin" : ""
           }`}
@@ -90,17 +93,17 @@ export default function Menu({ label }) {
   const [isLoading, setIsLoading] = useState(false);
   const [menu, setMenu] = useState(fakeMenu);
 
-  //   useEffect(() => {
-  //     setIsLoading(true);
-  //     getData("getAccessGates")
-  //       .then((data) => {
-  //         setGates(data);
-  //         setIsLoading(false);
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //       });
-  //   }, [isModalOpen]);
+  useEffect(() => {
+    setIsLoading(true);
+    getData("getItems")
+      .then((data) => {
+        setMenu(data);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [isModalOpen]);
 
   return (
     <div className="flex p-4 flex-col gap-10 w-full">

@@ -1,9 +1,14 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MdClose } from "react-icons/md";
 import Modal from "react-modal";
+import { toast } from "react-toastify";
 import * as Yup from "yup";
 import CustomStyledSelect from "../../../components/CustomStyledSelect";
+import Loading from "../../../components/Loading";
+import getData from "../RouteControllers/getData";
+import insertData from "../RouteControllers/insertData";
+import updateData from "../RouteControllers/updateData";
 
 const customStyles = {
   content: {
@@ -13,6 +18,28 @@ const customStyles = {
 
 export default function AddEditItem({ isModalOpen, setIsModalOpen, item }) {
   const [mutationInProgress, setMutationInProgress] = useState(false);
+  const [cuisines, setCuisines] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    setIsLoading(true);
+    getData("getCuisines")
+      .then((data) => {
+        setCuisines(
+          data.map((item) => {
+            return {
+              label: item.CuisineName,
+              value: item.CuisineID,
+            };
+          })
+        );
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error("Failed to load cuisines!...");
+      });
+  }, []);
 
   const itemFieldKeys = [
     {
@@ -25,16 +52,7 @@ export default function AddEditItem({ isModalOpen, setIsModalOpen, item }) {
       placeholder: "Select the cuisine...",
       label: "Cuisine",
       type: "select",
-      options: [
-        {
-          label: "Indian",
-          value: 7856,
-        },
-        {
-          label: "Mexican",
-          value: 4521,
-        },
-      ],
+      options: cuisines,
     },
     {
       name: "Price",
@@ -52,29 +70,29 @@ export default function AddEditItem({ isModalOpen, setIsModalOpen, item }) {
     }, {})
   );
 
-  //   const addNewResident = async (data) => {
-  //     let res = await insertData("addResident", data);
-  //     if (res) {
-  //       toast.success("Resident added successfully...");
-  //       setMutationInProgress(false);
-  //     } else {
-  //       toast.error("Failed to add new resident!...");
-  //       setMutationInProgress(false);
-  //     }
-  //     console.log(res);
-  //   };
+  const addNewItem = async (data) => {
+    let res = await insertData("addItem", data);
+    if (res) {
+      toast.success("Item added successfully...");
+      setMutationInProgress(false);
+    } else {
+      toast.error("Failed to add new Item!...");
+      setMutationInProgress(false);
+    }
+    console.log(res);
+  };
 
-  //   const updateResident = async (data) => {
-  //     let res = await updateData("updateResident", data);
-  //     if (res) {
-  //       toast.success("Resident updated successfully...");
-  //       setMutationInProgress(false);
-  //     } else {
-  //       toast.error("Failed to update resident!...");
-  //       setMutationInProgress(false);
-  //     }
-  //     console.log(res);
-  //   };
+  const updateItem = async (data) => {
+    let res = await updateData("updateItem", data);
+    if (res) {
+      toast.success("Item updated successfully...");
+      setMutationInProgress(false);
+    } else {
+      toast.error("Failed to update Item!...");
+      setMutationInProgress(false);
+    }
+    console.log(res);
+  };
 
   return (
     <div>
@@ -112,102 +130,105 @@ export default function AddEditItem({ isModalOpen, setIsModalOpen, item }) {
               validationSchema={schema}
               onSubmit={(values, r) => {
                 console.log(values);
-                // setMutationInProgress(true);
-                // if (cuisine) {
-                //   updateResident({
-                //     ResidentID: resident.ResidentID,
-                //     ...values,
-                //   });
-                // } else {
-                //   addNewResident(values);
-                //   r.resetForm();
-                // }
+                setMutationInProgress(true);
+                if (item) {
+                  updateItem({
+                    ItemID: item.ItemID,
+                    ...values,
+                  });
+                } else {
+                  addNewItem(values);
+                  r.resetForm();
+                }
               }}
             >
               {({ values }) => {
-                return (
-                  <Form className="flex flex-col p-8 gap-5">
-                    {itemFieldKeys.map((fine, index) => {
-                      if (fine.type !== "select") {
-                        return (
-                          <div>
-                            <p>
-                              {fine.label}
-                              <span className="text-red-600">*</span>
-                            </p>
-                            <Field
-                              name={fine.name}
-                              placeholder={fine.placeholder}
-                              className="bg-gray-100 px-3 py-2 rounded-lg w-full placeholder-black-444"
-                            />
-                            <ErrorMessage
-                              name={fine.name}
-                              render={(msg) => (
-                                <div className="text-red-600 text-sm">
-                                  {msg}
-                                </div>
-                              )}
-                            />
-                          </div>
-                        );
-                      } else {
-                        return (
-                          <div>
-                            <p>
-                              {fine.label}
-                              <span className="text-red-600">*</span>
-                            </p>
-                            <Field
-                              name={fine.name}
-                              options={fine.options}
-                              component={(props) => (
-                                <CustomStyledSelect
-                                  {...props}
-                                  isClearable
-                                  isSearchable
-                                />
-                              )}
-                            />
-                            <ErrorMessage
-                              name={fine.name}
-                              render={(msg) => (
-                                <div className="text-red-600 text-sm">
-                                  {msg}
-                                </div>
-                              )}
-                            />
-                          </div>
-                        );
-                      }
-                    })}
+                if (!isLoading) {
+                  return (
+                    <Form className="flex flex-col p-8 gap-5">
+                      {itemFieldKeys.map((fine, index) => {
+                        if (fine.type !== "select") {
+                          return (
+                            <div>
+                              <p>
+                                {fine.label}
+                                <span className="text-red-600">*</span>
+                              </p>
+                              <Field
+                                name={fine.name}
+                                placeholder={fine.placeholder}
+                                className="bg-gray-100 px-3 py-2 rounded-lg w-full placeholder-black-444"
+                              />
+                              <ErrorMessage
+                                name={fine.name}
+                                render={(msg) => (
+                                  <div className="text-red-600 text-sm">
+                                    {msg}
+                                  </div>
+                                )}
+                              />
+                            </div>
+                          );
+                        } else {
+                          return (
+                            <div>
+                              <p>
+                                {fine.label}
+                                <span className="text-red-600">*</span>
+                              </p>
+                              <Field
+                                name={fine.name}
+                                options={fine.options}
+                                component={(props) => (
+                                  <CustomStyledSelect
+                                    {...props}
+                                    isClearable
+                                    isSearchable
+                                  />
+                                )}
+                              />
+                              <ErrorMessage
+                                name={fine.name}
+                                render={(msg) => (
+                                  <div className="text-red-600 text-sm">
+                                    {msg}
+                                  </div>
+                                )}
+                              />
+                            </div>
+                          );
+                        }
+                      })}
 
-                    <div className="flex justify-end gap-5 my-5">
-                      <button
-                        onClick={() => {
-                          setIsModalOpen(false);
-                        }}
-                        type="reset"
-                        className="px-3 py-2 bg-red-600 text-white rounded-lg focus:outline-none"
-                      >
-                        Cancel
-                      </button>
+                      <div className="flex justify-end gap-5 my-5">
+                        <button
+                          onClick={() => {
+                            setIsModalOpen(false);
+                          }}
+                          type="reset"
+                          className="px-3 py-2 bg-red-600 text-white rounded-lg focus:outline-none"
+                        >
+                          Cancel
+                        </button>
 
-                      <button
-                        type="submit"
-                        className="px-3 py-2 bg-blue-600 text-white rounded-lg focus:outline-none"
-                      >
-                        {mutationInProgress ? (
-                          <div className="flex gap-3">
-                            <div className="spinner-grow w-6 h-6 mr-3"></div>
-                            <div>{"Please wait..."}</div>
-                          </div>
-                        ) : (
-                          "Submit"
-                        )}
-                      </button>
-                    </div>
-                  </Form>
-                );
+                        <button
+                          type="submit"
+                          className="px-3 py-2 bg-blue-600 text-white rounded-lg focus:outline-none"
+                        >
+                          {mutationInProgress ? (
+                            <div className="flex gap-3">
+                              <div className="spinner-grow w-6 h-6 mr-3"></div>
+                              <div>{"Please wait..."}</div>
+                            </div>
+                          ) : (
+                            "Submit"
+                          )}
+                        </button>
+                      </div>
+                    </Form>
+                  );
+                }
+                return <Loading />;
               }}
             </Formik>
           </div>

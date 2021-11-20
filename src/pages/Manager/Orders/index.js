@@ -4,36 +4,25 @@ import { MdAddCircleOutline } from "react-icons/md";
 import { BsPencil } from "react-icons/bs";
 import Loading from "../../../components/Loading";
 import AddEditOrders from "./AddEditOrders";
-
-const fakeOrders = [
-  {
-    firstName: "Maanas",
-    lastName: "Katta",
-    phoneNumber: "9121012244",
-    dateAndTime: "24-Jun-2021",
-    discount: 0,
-    itemName: "Chicken Biriyani",
-    Price: 12,
-  },
-];
+import getData from "../RouteControllers/getData";
 
 const Orders = ({ label }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [orderToBeEdited, setOrderToBeEdited] = useState(null);
-  const [orders, setOrders] = useState(fakeOrders);
+  const [orders, setOrders] = useState(null);
 
-  //   useEffect(() => {
-  //     setIsLoading(true);
-  //     getData("getChefs")
-  //       .then((data) => {
-  //         setChefs(data);
-  //         setIsLoading(false);
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //       });
-  //   }, [isModalOpen]);
+  useEffect(() => {
+    setIsLoading(true);
+    getData("getOrders")
+      .then((data) => {
+        setOrders(data);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [isModalOpen]);
 
   const edit = (order) => {
     setOrderToBeEdited(order);

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BiDish } from "react-icons/bi";
 import { BsFillCalendar2CheckFill, BsPencil, BsTrash } from "react-icons/bs";
 import { IoMdPricetag } from "react-icons/io";
@@ -6,6 +6,9 @@ import { MdAddCircleOutline } from "react-icons/md";
 import Loading from "../../../components/Loading";
 import NoDataText from "../../../components/NoDataText";
 import AddEditEvent from "./AddEditEvent";
+import getData from "../RouteControllers/getData";
+import deleteData from "../RouteControllers/deleteData";
+import { toast } from "react-toastify";
 
 const fakeEvents = [
   {
@@ -21,17 +24,17 @@ const Event = ({ event }) => {
 
   console.log(event);
 
-  //   const deleteGate = async (data) => {
-  //     setMutationInProgress(true);
-  //     let res = await deleteData("deleteAccessGate", data);
-  //     if (res) {
-  //       toast.success("Access gate deleted successfully...");
-  //       setMutationInProgress(false);
-  //     } else {
-  //       toast.error("Failed to delete access gate!...");
-  //       setMutationInProgress(false);
-  //     }
-  //   };
+  const deleteEvent = async (data) => {
+    setMutationInProgress(true);
+    let res = await deleteData("deleteEvent", data);
+    if (res) {
+      toast.success("Event deleted successfully...");
+      setMutationInProgress(false);
+    } else {
+      toast.error("Failed to delete Event!...");
+      setMutationInProgress(false);
+    }
+  };
 
   return (
     <div className="flex flex-col gap-3 p-3 border bg-blue-200 rounded shadow-md">
@@ -58,11 +61,11 @@ const Event = ({ event }) => {
           className=" text-blue-900 text-xl cursor-pointer"
         />
         <BsTrash
-          //   onClick={() => {
-          //     deleteGate({
-          //       gateID: gate.gateID,
-          //     });
-          //   }}
+          onClick={() => {
+            deleteEvent({
+              eventID: event.eventID,
+            });
+          }}
           className={`text-red-600 text-xl cursor-pointer ${
             mutationInProgress ? " animate-spin" : ""
           }`}
@@ -86,17 +89,18 @@ export default function Events({ label }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [events, setEvents] = useState(fakeEvents);
-  //   useEffect(() => {
-  //     setIsLoading(true);
-  //     getData("getAccessGates")
-  //       .then((data) => {
-  //         setGates(data);
-  //         setIsLoading(false);
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //       });
-  //   }, [isModalOpen]);
+
+  useEffect(() => {
+    setIsLoading(true);
+    getData("getEvents")
+      .then((data) => {
+        setEvents(data);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [isModalOpen]);
 
   return (
     <div className="flex p-4 flex-col gap-10 w-full">

@@ -4,41 +4,25 @@ import { MdAddCircleOutline } from "react-icons/md";
 import { BsPencil } from "react-icons/bs";
 import Loading from "../../../components/Loading";
 import AddEditManager from "./AddEditManager";
-
-const fakeManagers = [
-  {
-    firstName: "Maanas",
-    lastName: "Katta",
-    email: "maanas@gmail.com",
-    shiftPeriod: "Lunch",
-    phoneNumber: "9121012244",
-  },
-  {
-    firstName: "Elon",
-    lastName: "Musk",
-    email: "elon@musk.com",
-    shiftPeriod: "Dinner",
-    phoneNumber: "5419304455",
-  },
-];
+import getData from "../RouteControllers/getData";
 
 const Managers = ({ label }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [managerToBeEdited, setManagerToBeEdited] = useState(null);
-  const [managers, setManagers] = useState(fakeManagers);
+  const [managers, setManagers] = useState(null);
 
-  //   useEffect(() => {
-  //     setIsLoading(true);
-  //     getData("getChefs")
-  //       .then((data) => {
-  //         setChefs(data);
-  //         setIsLoading(false);
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //       });
-  //   }, [isModalOpen]);
+  useEffect(() => {
+    setIsLoading(true);
+    getData("getManagers")
+      .then((data) => {
+        setManagers(data);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [isModalOpen]);
 
   const edit = (manager) => {
     setManagerToBeEdited(manager);
