@@ -28,17 +28,17 @@ const Chefs = ({ label }) => {
   const [chefToBeEdited, setChefToBeEdited] = useState(null);
   const [chefs, setChefs] = useState(fakeChefs);
 
-  //   useEffect(() => {
-  //     setIsLoading(true);
-  //     getData("getChefs")
-  //       .then((data) => {
-  //         setChefs(data);
-  //         setIsLoading(false);
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //       });
-  //   }, [isModalOpen]);
+  // useEffect(() => {
+  //   setIsLoading(true);
+  //   getData("getChefs")
+  //     .then((data) => {
+  //       setChefs(data);
+  //       setIsLoading(false);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }, [isModalOpen]);
 
   const edit = (chef) => {
     setChefToBeEdited(chef);
