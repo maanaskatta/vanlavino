@@ -28,6 +28,7 @@ import Events from "./Events";
 import Reservations from "./TableReservations";
 import Orders from "./Orders";
 import Salaries from "./Salaries";
+import Reviews from "./Reviews";
 
 const managerTiles = [
   {
@@ -106,7 +107,7 @@ const managerTiles = [
     label: "Reviews",
     path: "/reviews",
     icon: () => <HiOutlineSpeakerphone />,
-    render: (label) => <p>{label}</p>,
+    render: (label) => <Reviews label={label} />,
   },
   {
     label: "Staff",
