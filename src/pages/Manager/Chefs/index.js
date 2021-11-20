@@ -4,41 +4,25 @@ import { MdAddCircleOutline } from "react-icons/md";
 import { BsPencil } from "react-icons/bs";
 import Loading from "../../../components/Loading";
 import AddEditChef from "./AddEditChef";
-
-const fakeChefs = [
-  {
-    firstName: "Maanas",
-    lastName: "Katta",
-    CuisineName: "Indian",
-    shiftPeriod: "Lunch",
-    phoneNumber: "9121012244",
-  },
-  {
-    firstName: "Elon",
-    lastName: "Musk",
-    CuisineName: "Mexican",
-    shiftPeriod: "Dinner",
-    phoneNumber: "5419304455",
-  },
-];
+import getData from "../RouteControllers/getData";
 
 const Chefs = ({ label }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [chefToBeEdited, setChefToBeEdited] = useState(null);
-  const [chefs, setChefs] = useState(fakeChefs);
+  const [chefs, setChefs] = useState(null);
 
-  // useEffect(() => {
-  //   setIsLoading(true);
-  //   getData("getChefs")
-  //     .then((data) => {
-  //       setChefs(data);
-  //       setIsLoading(false);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // }, [isModalOpen]);
+  useEffect(() => {
+    setIsLoading(true);
+    getData("getChefs")
+      .then((data) => {
+        setChefs(data);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [isModalOpen]);
 
   const edit = (chef) => {
     setChefToBeEdited(chef);
