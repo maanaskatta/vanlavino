@@ -2,8 +2,11 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 import React, { useState } from "react";
 import { MdClose } from "react-icons/md";
 import Modal from "react-modal";
+import { toast } from "react-toastify";
 import * as Yup from "yup";
 import CustomStyledSelect from "../../../components/CustomStyledSelect";
+import insertData from "../RouteControllers/insertData";
+import updateData from "../RouteControllers/updateData";
 
 const customStyles = {
   content: {
@@ -36,9 +39,9 @@ export default function AddEditReservation({
       label: "Phone Number",
     },
     {
-      name: "dateAndTime",
-      placeholder: "Enter the date and time...",
-      label: "Date and Time",
+      name: "dateOfBooking",
+      placeholder: "Enter the date and time of booking...",
+      label: "Date and Time of Booking",
     },
   ];
 
@@ -51,29 +54,29 @@ export default function AddEditReservation({
     }, {})
   );
 
-  //   const addNewResident = async (data) => {
-  //     let res = await insertData("addResident", data);
-  //     if (res) {
-  //       toast.success("Resident added successfully...");
-  //       setMutationInProgress(false);
-  //     } else {
-  //       toast.error("Failed to add new resident!...");
-  //       setMutationInProgress(false);
-  //     }
-  //     console.log(res);
-  //   };
+  const addNewReservation = async (data) => {
+    let res = await insertData("addReservation", data);
+    if (res) {
+      toast.success("Resident added successfully...");
+      setMutationInProgress(false);
+    } else {
+      toast.error("Failed to add new resident!...");
+      setMutationInProgress(false);
+    }
+    console.log(res);
+  };
 
-  //   const updateResident = async (data) => {
-  //     let res = await updateData("updateResident", data);
-  //     if (res) {
-  //       toast.success("Resident updated successfully...");
-  //       setMutationInProgress(false);
-  //     } else {
-  //       toast.error("Failed to update resident!...");
-  //       setMutationInProgress(false);
-  //     }
-  //     console.log(res);
-  //   };
+  const updateReservation = async (data) => {
+    let res = await updateData("updateReservation", data);
+    if (res) {
+      toast.success("Resident updated successfully...");
+      setMutationInProgress(false);
+    } else {
+      toast.error("Failed to update resident!...");
+      setMutationInProgress(false);
+    }
+    console.log(res);
+  };
 
   return (
     <div>
@@ -118,16 +121,16 @@ export default function AddEditReservation({
               validationSchema={schema}
               onSubmit={(values, r) => {
                 console.log(values);
-                // setMutationInProgress(true);
-                // if (cuisine) {
-                //   updateResident({
-                //     ResidentID: resident.ResidentID,
-                //     ...values,
-                //   });
-                // } else {
-                //   addNewResident(values);
-                //   r.resetForm();
-                // }
+                setMutationInProgress(true);
+                if (reservation) {
+                  updateReservation({
+                    ReservationID: reservation.ReservationID,
+                    ...values,
+                  });
+                } else {
+                  addNewReservation(values);
+                  r.resetForm();
+                }
               }}
             >
               {({ values }) => {

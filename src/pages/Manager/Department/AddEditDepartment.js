@@ -2,7 +2,10 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 import React, { useState } from "react";
 import { MdClose } from "react-icons/md";
 import Modal from "react-modal";
+import { toast } from "react-toastify";
 import * as Yup from "yup";
+import insertData from "../RouteControllers/insertData";
+import updateData from "../RouteControllers/updateData";
 
 const customStyles = {
   content: {
@@ -34,29 +37,29 @@ export default function AddEditDepartment({
     }, {})
   );
 
-  //   const addNewitem = async (data) => {
-  //     let res = await insertData("additem", data);
-  //     if (res) {
-  //       toast.success("item added successfully...");
-  //       setMutationInProgress(false);
-  //     } else {
-  //       toast.error("Failed to add new item!...");
-  //       setMutationInProgress(false);
-  //     }
-  //     console.log(res);
-  //   };
+  const addNewDepartment = async (data) => {
+    let res = await insertData("addDepartment", data);
+    if (res) {
+      toast.success("Department added successfully...");
+      setMutationInProgress(false);
+    } else {
+      toast.error("Failed to add new Department!...");
+      setMutationInProgress(false);
+    }
+    console.log(res);
+  };
 
-  //   const updateResident = async (data) => {
-  //     let res = await updateData("updateResident", data);
-  //     if (res) {
-  //       toast.success("Resident updated successfully...");
-  //       setMutationInProgress(false);
-  //     } else {
-  //       toast.error("Failed to update resident!...");
-  //       setMutationInProgress(false);
-  //     }
-  //     console.log(res);
-  //   };
+  const updateDepartment = async (data) => {
+    let res = await updateData("updateDepartment", data);
+    if (res) {
+      toast.success("Department updated successfully...");
+      setMutationInProgress(false);
+    } else {
+      toast.error("Failed to update Department!...");
+      setMutationInProgress(false);
+    }
+    console.log(res);
+  };
 
   return (
     <div>
@@ -99,16 +102,16 @@ export default function AddEditDepartment({
               validationSchema={schema}
               onSubmit={(values, r) => {
                 console.log(values);
-                // setMutationInProgress(true);
-                // if (cuisine) {
-                //   updateResident({
-                //     ResidentID: resident.ResidentID,
-                //     ...values,
-                //   });
-                // } else {
-                //   addNewResident(values);
-                //   r.resetForm();
-                // }
+                setMutationInProgress(true);
+                if (department) {
+                  updateDepartment({
+                    DepartmentID: department.DepartmentID,
+                    ...values,
+                  });
+                } else {
+                  addNewDepartment(values);
+                  r.resetForm();
+                }
               }}
             >
               {({ values }) => {

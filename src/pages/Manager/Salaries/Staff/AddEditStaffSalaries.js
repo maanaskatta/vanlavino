@@ -1,9 +1,14 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MdClose } from "react-icons/md";
 import Modal from "react-modal";
+import { toast } from "react-toastify";
 import * as Yup from "yup";
 import CustomStyledSelect from "../../../../components/CustomStyledSelect";
+import Loading from "../../../../components/Loading";
+import getData from "../../RouteControllers/getData";
+import insertData from "../../RouteControllers/insertData";
+import updateData from "../../RouteControllers/updateData";
 
 const customStyles = {
   content: {
@@ -18,6 +23,8 @@ export default function AddEditStaffSalaries({
   setSalaryToBeEdited,
 }) {
   const [mutationInProgress, setMutationInProgress] = useState(false);
+  const [staff, setStaff] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const fieldKeys = [
     {
@@ -25,12 +32,7 @@ export default function AddEditStaffSalaries({
       placeholder: "Select the staff...",
       label: "Staff",
       type: "select",
-      options: [
-        {
-          label: "Bill Gates",
-          value: 78549,
-        },
-      ],
+      options: staff,
     },
 
     {
@@ -39,6 +41,25 @@ export default function AddEditStaffSalaries({
       label: "Salary",
     },
   ];
+
+  useEffect(() => {
+    setIsLoading(true);
+    getData("getStaff")
+      .then((data) => {
+        setStaff(
+          data.map((item) => {
+            return {
+              label: item.firstName + " " + item.lastName,
+              value: item.StaffID,
+            };
+          })
+        );
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   const schema = Yup.object().shape(
     fieldKeys.reduce((prev, cur) => {
@@ -49,29 +70,29 @@ export default function AddEditStaffSalaries({
     }, {})
   );
 
-  //   const addNewResident = async (data) => {
-  //     let res = await insertData("addResident", data);
-  //     if (res) {
-  //       toast.success("Resident added successfully...");
-  //       setMutationInProgress(false);
-  //     } else {
-  //       toast.error("Failed to add new resident!...");
-  //       setMutationInProgress(false);
-  //     }
-  //     console.log(res);
-  //   };
+  const addNewRecord = async (data) => {
+    let res = await insertData("addStaffSalary", data);
+    if (res) {
+      toast.success("Record added successfully...");
+      setMutationInProgress(false);
+    } else {
+      toast.error("Failed to add new Record!...");
+      setMutationInProgress(false);
+    }
+    console.log(res);
+  };
 
-  //   const updateResident = async (data) => {
-  //     let res = await updateData("updateResident", data);
-  //     if (res) {
-  //       toast.success("Resident updated successfully...");
-  //       setMutationInProgress(false);
-  //     } else {
-  //       toast.error("Failed to update resident!...");
-  //       setMutationInProgress(false);
-  //     }
-  //     console.log(res);
-  //   };
+  const updateRecord = async (data) => {
+    let res = await updateData("updateStaffSalary", data);
+    if (res) {
+      toast.success("Record updated successfully...");
+      setMutationInProgress(false);
+    } else {
+      toast.error("Failed to update Record!...");
+      setMutationInProgress(false);
+    }
+    console.log(res);
+  };
 
   return (
     <div>
@@ -112,103 +133,106 @@ export default function AddEditStaffSalaries({
               validationSchema={schema}
               onSubmit={(values, r) => {
                 console.log(values);
-                // setMutationInProgress(true);
-                // if (cuisine) {
-                //   updateResident({
-                //     ResidentID: resident.ResidentID,
-                //     ...values,
-                //   });
-                // } else {
-                //   addNewResident(values);
-                //   r.resetForm();
-                // }
+                setMutationInProgress(true);
+                if (salary) {
+                  updateRecord({
+                    id: salary.id,
+                    ...values,
+                  });
+                } else {
+                  addNewRecord(values);
+                  r.resetForm();
+                }
               }}
             >
               {({ values }) => {
-                return (
-                  <Form className="flex flex-col p-8 gap-5">
-                    {fieldKeys.map((item, index) => {
-                      if (item.type !== "select") {
-                        return (
-                          <div>
-                            <p>
-                              {item.label}
-                              <span className="text-red-600">*</span>
-                            </p>
-                            <Field
-                              name={item.name}
-                              placeholder={item.placeholder}
-                              className="bg-gray-100 px-3 py-2 rounded-lg w-full placeholder-black-444"
-                            />
-                            <ErrorMessage
-                              name={item.name}
-                              render={(msg) => (
-                                <div className="text-red-600 text-sm">
-                                  {msg}
-                                </div>
-                              )}
-                            />
-                          </div>
-                        );
-                      } else {
-                        return (
-                          <div>
-                            <p>
-                              {item.label}
-                              <span className="text-red-600">*</span>
-                            </p>
-                            <Field
-                              name={item.name}
-                              options={item.options}
-                              component={(props) => (
-                                <CustomStyledSelect
-                                  {...props}
-                                  isClearable
-                                  isSearchable
-                                />
-                              )}
-                            />
-                            <ErrorMessage
-                              name={item.name}
-                              render={(msg) => (
-                                <div className="text-red-600 text-sm">
-                                  {msg}
-                                </div>
-                              )}
-                            />
-                          </div>
-                        );
-                      }
-                    })}
+                if (!isLoading) {
+                  return (
+                    <Form className="flex flex-col p-8 gap-5">
+                      {fieldKeys.map((item, index) => {
+                        if (item.type !== "select") {
+                          return (
+                            <div>
+                              <p>
+                                {item.label}
+                                <span className="text-red-600">*</span>
+                              </p>
+                              <Field
+                                name={item.name}
+                                placeholder={item.placeholder}
+                                className="bg-gray-100 px-3 py-2 rounded-lg w-full placeholder-black-444"
+                              />
+                              <ErrorMessage
+                                name={item.name}
+                                render={(msg) => (
+                                  <div className="text-red-600 text-sm">
+                                    {msg}
+                                  </div>
+                                )}
+                              />
+                            </div>
+                          );
+                        } else {
+                          return (
+                            <div>
+                              <p>
+                                {item.label}
+                                <span className="text-red-600">*</span>
+                              </p>
+                              <Field
+                                name={item.name}
+                                options={item.options}
+                                component={(props) => (
+                                  <CustomStyledSelect
+                                    {...props}
+                                    isClearable
+                                    isSearchable
+                                  />
+                                )}
+                              />
+                              <ErrorMessage
+                                name={item.name}
+                                render={(msg) => (
+                                  <div className="text-red-600 text-sm">
+                                    {msg}
+                                  </div>
+                                )}
+                              />
+                            </div>
+                          );
+                        }
+                      })}
 
-                    <div className="flex justify-end gap-5 my-5">
-                      <button
-                        onClick={() => {
-                          setIsModalOpen(false);
-                          setSalaryToBeEdited(null);
-                        }}
-                        type="reset"
-                        className="px-3 py-2 bg-red-600 text-white rounded-lg focus:outline-none"
-                      >
-                        Cancel
-                      </button>
+                      <div className="flex justify-end gap-5 my-5">
+                        <button
+                          onClick={() => {
+                            setIsModalOpen(false);
+                            setSalaryToBeEdited(null);
+                          }}
+                          type="reset"
+                          className="px-3 py-2 bg-red-600 text-white rounded-lg focus:outline-none"
+                        >
+                          Cancel
+                        </button>
 
-                      <button
-                        type="submit"
-                        className="px-3 py-2 bg-blue-600 text-white rounded-lg focus:outline-none"
-                      >
-                        {mutationInProgress ? (
-                          <div className="flex gap-3">
-                            <div className="spinner-grow w-6 h-6 mr-3"></div>
-                            <div>{"Please wait..."}</div>
-                          </div>
-                        ) : (
-                          "Submit"
-                        )}
-                      </button>
-                    </div>
-                  </Form>
-                );
+                        <button
+                          type="submit"
+                          className="px-3 py-2 bg-blue-600 text-white rounded-lg focus:outline-none"
+                        >
+                          {mutationInProgress ? (
+                            <div className="flex gap-3">
+                              <div className="spinner-grow w-6 h-6 mr-3"></div>
+                              <div>{"Please wait..."}</div>
+                            </div>
+                          ) : (
+                            "Submit"
+                          )}
+                        </button>
+                      </div>
+                    </Form>
+                  );
+                }
+                return <Loading />;
               }}
             </Formik>
           </div>

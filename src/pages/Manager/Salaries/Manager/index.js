@@ -1,35 +1,28 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BsPencil } from "react-icons/bs";
 import { MdAddCircleOutline } from "react-icons/md";
 import { useTable } from "react-table";
 import Loading from "../../../../components/Loading";
 import AddEditManagerSalaries from "./AddEditManagerSalaries";
-
-const fakeSalaries = [
-  {
-    firstName: "Maanas",
-    lastName: "Katta",
-    salary: 1200,
-  },
-];
+import getData from "../../RouteControllers/getData";
 
 const ManagerSalaries = ({ label }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [salaryToBeEdited, setSalaryToBeEdited] = useState(null);
-  const [salaries, setSalaries] = useState(fakeSalaries);
+  const [salaries, setSalaries] = useState(null);
 
-  //   useEffect(() => {
-  //     setIsLoading(true);
-  //     getData("getChefs")
-  //       .then((data) => {
-  //         setChefs(data);
-  //         setIsLoading(false);
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //       });
-  //   }, [isModalOpen]);
+  useEffect(() => {
+    setIsLoading(true);
+    getData("getManagerSalaries")
+      .then((data) => {
+        setSalaries(data);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [isModalOpen]);
 
   const edit = (salary) => {
     setSalaryToBeEdited(salary);

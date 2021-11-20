@@ -28,13 +28,13 @@ export default function AddEditChef({
 
   useEffect(() => {
     setIsLoading(true);
-    getData("getDepartments")
+    getData("getCuisines")
       .then((data) => {
         setDepartments(
           data.map((item) => {
             return {
-              label: item.DepartmentName,
-              value: item.DepartmentID,
+              label: item.CuisineName,
+              value: item.CuisineID,
             };
           })
         );

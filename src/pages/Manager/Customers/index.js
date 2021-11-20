@@ -4,33 +4,25 @@ import { MdAddCircleOutline } from "react-icons/md";
 import { BsPencil } from "react-icons/bs";
 import Loading from "../../../components/Loading";
 import AddEditCustomers from "./AddEditCustomers";
-
-const fakeCustomers = [
-  {
-    firstName: "Maanas",
-    lastName: "Katta",
-    phoneNumber: "9121012244",
-    email: "maanaskatta6@gmail.com",
-    dateOfBirth: "12-May-2000",
-  },
-];
+import getData from "../RouteControllers/getData";
 
 const Customers = ({ label }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [customerToBeEdited, setCustomerToBeEdited] = useState(null);
-  const [customers, setCustomers] = useState(fakeCustomers);
-  //   useEffect(() => {
-  //     setIsLoading(true);
-  //     getData("getChefs")
-  //       .then((data) => {
-  //         setChefs(data);
-  //         setIsLoading(false);
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //       });
-  //   }, [isModalOpen]);
+  const [customers, setCustomers] = useState(null);
+
+  useEffect(() => {
+    setIsLoading(true);
+    getData("getCustomers")
+      .then((data) => {
+        setCustomers(data);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [isModalOpen]);
 
   const edit = (customer) => {
     setCustomerToBeEdited(customer);

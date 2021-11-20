@@ -1,36 +1,28 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BsPencil } from "react-icons/bs";
 import { MdAddCircleOutline } from "react-icons/md";
 import { useTable } from "react-table";
 import Loading from "../../../components/Loading";
 import AddEditStewards from "./AddEditSteward";
-
-const fakeStewards = [
-  {
-    firstName: "Maanas",
-    lastName: "Katta",
-    phoneNumber: "9121012244",
-    email: "maanaskatta6@gmail.com",
-    dateOfBirth: "12-May-2000",
-  },
-];
+import getData from "../RouteControllers/getData";
 
 const Stewards = ({ label }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [stewardToBeEdited, setStewardToBeEdited] = useState(null);
-  const [stewards, setStewards] = useState(fakeStewards);
-  //   useEffect(() => {
-  //     setIsLoading(true);
-  //     getData("getChefs")
-  //       .then((data) => {
-  //         setChefs(data);
-  //         setIsLoading(false);
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //       });
-  //   }, [isModalOpen]);
+  const [stewards, setStewards] = useState(null);
+
+  useEffect(() => {
+    setIsLoading(true);
+    getData("getStewards")
+      .then((data) => {
+        setStewards(data);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [isModalOpen]);
 
   const edit = (steward) => {
     setStewardToBeEdited(steward);

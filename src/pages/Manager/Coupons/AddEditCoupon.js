@@ -2,8 +2,11 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 import React, { useState } from "react";
 import { MdClose } from "react-icons/md";
 import Modal from "react-modal";
+import { toast } from "react-toastify";
 import * as Yup from "yup";
 import CustomStyledSelect from "../../../components/CustomStyledSelect";
+import insertData from "../RouteControllers/insertData";
+import updateData from "../RouteControllers/updateData";
 
 const customStyles = {
   content: {
@@ -46,29 +49,29 @@ export default function AddEditCoupon({ isModalOpen, setIsModalOpen, coupon }) {
     }, {})
   );
 
-  //   const addNewResident = async (data) => {
-  //     let res = await insertData("addResident", data);
-  //     if (res) {
-  //       toast.success("Resident added successfully...");
-  //       setMutationInProgress(false);
-  //     } else {
-  //       toast.error("Failed to add new resident!...");
-  //       setMutationInProgress(false);
-  //     }
-  //     console.log(res);
-  //   };
+  const addNewCoupon = async (data) => {
+    let res = await insertData("addCoupon", data);
+    if (res) {
+      toast.success("Coupon added successfully...");
+      setMutationInProgress(false);
+    } else {
+      toast.error("Failed to add new Coupon!...");
+      setMutationInProgress(false);
+    }
+    console.log(res);
+  };
 
-  //   const updateResident = async (data) => {
-  //     let res = await updateData("updateResident", data);
-  //     if (res) {
-  //       toast.success("Resident updated successfully...");
-  //       setMutationInProgress(false);
-  //     } else {
-  //       toast.error("Failed to update resident!...");
-  //       setMutationInProgress(false);
-  //     }
-  //     console.log(res);
-  //   };
+  const updateCoupon = async (data) => {
+    let res = await updateData("updateCoupon", data);
+    if (res) {
+      toast.success("Coupon updated successfully...");
+      setMutationInProgress(false);
+    } else {
+      toast.error("Failed to update Coupon!...");
+      setMutationInProgress(false);
+    }
+    console.log(res);
+  };
 
   return (
     <div>
@@ -107,16 +110,16 @@ export default function AddEditCoupon({ isModalOpen, setIsModalOpen, coupon }) {
               validationSchema={schema}
               onSubmit={(values, r) => {
                 console.log(values);
-                // setMutationInProgress(true);
-                // if (cuisine) {
-                //   updateResident({
-                //     ResidentID: resident.ResidentID,
-                //     ...values,
-                //   });
-                // } else {
-                //   addNewResident(values);
-                //   r.resetForm();
-                // }
+                setMutationInProgress(true);
+                if (coupon) {
+                  updateCoupon({
+                    CouponID: coupon.CouponID,
+                    ...values,
+                  });
+                } else {
+                  addNewCoupon(values);
+                  r.resetForm();
+                }
               }}
             >
               {({ values }) => {

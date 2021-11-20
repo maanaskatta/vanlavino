@@ -1,34 +1,28 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BsPencil, BsTrash } from "react-icons/bs";
 import { MdAddCircleOutline, MdOutlineAccountTree } from "react-icons/md";
 import Loading from "../../../components/Loading";
 import NoDataText from "../../../components/NoDataText";
 import AddEditDepartment from "./AddEditDepartment";
-
-const fakeDepartments = [
-  {
-    DepartmentName: "House Keeping",
-  },
-  {
-    DepartmentName: "Front Office",
-  },
-];
+import getData from "../RouteControllers/getData";
+import deleteData from "../RouteControllers/deleteData";
+import { toast } from "react-toastify";
 
 const Department = ({ department }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [mutationInProgress, setMutationInProgress] = useState(false);
 
-  //   const deleteGate = async (data) => {
-  //     setMutationInProgress(true);
-  //     let res = await deleteData("deleteAccessGate", data);
-  //     if (res) {
-  //       toast.success("Access gate deleted successfully...");
-  //       setMutationInProgress(false);
-  //     } else {
-  //       toast.error("Failed to delete access gate!...");
-  //       setMutationInProgress(false);
-  //     }
-  //   };
+  const deleteGate = async (data) => {
+    setMutationInProgress(true);
+    let res = await deleteData("deleteDepartment", data);
+    if (res) {
+      toast.success("Department deleted successfully...");
+      setMutationInProgress(false);
+    } else {
+      toast.error("Failed to delete Department!...");
+      setMutationInProgress(false);
+    }
+  };
 
   return (
     <div className="flex flex-col gap-3 p-3 border bg-blue-200 rounded shadow-md">
@@ -45,11 +39,11 @@ const Department = ({ department }) => {
           className=" text-blue-900 text-xl cursor-pointer"
         />
         <BsTrash
-          //   onClick={() => {
-          //     deleteGate({
-          //       gateID: gate.gateID,
-          //     });
-          //   }}
+          onClick={() => {
+            deleteGate({
+              DepartmentID: department.DepartmentID,
+            });
+          }}
           className={`text-red-600 text-xl cursor-pointer ${
             mutationInProgress ? " animate-spin" : ""
           }`}
@@ -72,18 +66,19 @@ const Department = ({ department }) => {
 export default function Departments({ label }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [departments, setDepartments] = useState(fakeDepartments);
-  //   useEffect(() => {
-  //     setIsLoading(true);
-  //     getData("getAccessGates")
-  //       .then((data) => {
-  //         setGates(data);
-  //         setIsLoading(false);
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //       });
-  //   }, [isModalOpen]);
+  const [departments, setDepartments] = useState(null);
+
+  useEffect(() => {
+    setIsLoading(true);
+    getData("getDepartments")
+      .then((data) => {
+        setDepartments(data);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [isModalOpen]);
 
   return (
     <div className="flex p-4 flex-col gap-10 w-full">

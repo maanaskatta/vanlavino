@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BiDish } from "react-icons/bi";
 import {
   BsFillCalendar2CheckFill,
@@ -11,37 +11,25 @@ import { MdAddCircleOutline } from "react-icons/md";
 import Loading from "../../../components/Loading";
 import NoDataText from "../../../components/NoDataText";
 import AddEditCoupon from "./AddEditCoupon";
-
-const fakeCoupons = [
-  {
-    couponName: "OFF20",
-    discount: 2,
-    validityFrom: "17-Nov-2021",
-    validityTo: "27-Nov-2021",
-  },
-  {
-    couponName: "GET30OFF",
-    discount: 3.5,
-    validityFrom: "12-Oct-2022",
-    validityTo: "21-Dec-2022",
-  },
-];
+import getData from "../RouteControllers/getData";
+import deleteData from "../RouteControllers/deleteData";
+import { toast } from "react-toastify";
 
 const Coupon = ({ coupon }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [mutationInProgress, setMutationInProgress] = useState(false);
 
-  //   const deleteGate = async (data) => {
-  //     setMutationInProgress(true);
-  //     let res = await deleteData("deleteAccessGate", data);
-  //     if (res) {
-  //       toast.success("Access gate deleted successfully...");
-  //       setMutationInProgress(false);
-  //     } else {
-  //       toast.error("Failed to delete access gate!...");
-  //       setMutationInProgress(false);
-  //     }
-  //   };
+  const deleteCoupon = async (data) => {
+    setMutationInProgress(true);
+    let res = await deleteData("deleteCoupon", data);
+    if (res) {
+      toast.success("Coupon deleted successfully...");
+      setMutationInProgress(false);
+    } else {
+      toast.error("Failed to delete Coupon!...");
+      setMutationInProgress(false);
+    }
+  };
 
   return (
     <div className="flex flex-col gap-3 p-3 border bg-blue-200 rounded shadow-md">
@@ -73,11 +61,11 @@ const Coupon = ({ coupon }) => {
           className=" text-blue-900 text-xl cursor-pointer"
         />
         <BsTrash
-          //   onClick={() => {
-          //     deleteGate({
-          //       gateID: gate.gateID,
-          //     });
-          //   }}
+          onClick={() => {
+            deleteCoupon({
+              CouponID: coupon.CouponID,
+            });
+          }}
           className={`text-red-600 text-xl cursor-pointer ${
             mutationInProgress ? " animate-spin" : ""
           }`}
@@ -100,18 +88,19 @@ const Coupon = ({ coupon }) => {
 export default function Coupons({ label }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [coupons, setCoupons] = useState(fakeCoupons);
-  //   useEffect(() => {
-  //     setIsLoading(true);
-  //     getData("getAccessGates")
-  //       .then((data) => {
-  //         setGates(data);
-  //         setIsLoading(false);
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //       });
-  //   }, [isModalOpen]);
+  const [coupons, setCoupons] = useState(null);
+
+  useEffect(() => {
+    setIsLoading(true);
+    getData("getCoupons")
+      .then((data) => {
+        setCoupons(data);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [isModalOpen]);
 
   return (
     <div className="flex p-4 flex-col gap-10 w-full">

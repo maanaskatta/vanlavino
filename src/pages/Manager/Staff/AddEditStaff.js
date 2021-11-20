@@ -63,7 +63,7 @@ export default function AddEditStaff({
       label: "Phone Number",
     },
     {
-      name: "DepartmentName",
+      name: "DepartmentID",
       placeholder: "Select the department...",
       label: "Department",
       type: "select",

@@ -4,33 +4,25 @@ import { MdAddCircleOutline } from "react-icons/md";
 import { BsPencil } from "react-icons/bs";
 import Loading from "../../../components/Loading";
 import AddEditReservation from "./AddEditReservation";
-
-const fakeReservations = [
-  {
-    firstName: "Maanas",
-    lastName: "Katta",
-    phoneNumber: "9121012244",
-    dateAndTime: "24-Jun-2021",
-  },
-];
+import getData from "../RouteControllers/getData";
 
 const Reservations = ({ label }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [reservationToBeEdited, setReservationToBeEdited] = useState(null);
-  const [reservations, setReservations] = useState(fakeReservations);
+  const [reservations, setReservations] = useState(null);
 
-  //   useEffect(() => {
-  //     setIsLoading(true);
-  //     getData("getChefs")
-  //       .then((data) => {
-  //         setChefs(data);
-  //         setIsLoading(false);
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //       });
-  //   }, [isModalOpen]);
+  useEffect(() => {
+    setIsLoading(true);
+    getData("getReservations")
+      .then((data) => {
+        setReservations(data);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [isModalOpen]);
 
   const edit = (reservation) => {
     setReservationToBeEdited(reservation);

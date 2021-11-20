@@ -2,8 +2,11 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 import React, { useState } from "react";
 import { MdClose } from "react-icons/md";
 import Modal from "react-modal";
+import { toast } from "react-toastify";
 import * as Yup from "yup";
 import CustomStyledSelect from "../../../components/CustomStyledSelect";
+import insertData from "../RouteControllers/insertData";
+import updateData from "../RouteControllers/updateData";
 
 const customStyles = {
   content: {
@@ -56,29 +59,29 @@ export default function AddEditCustomers({
     }, {})
   );
 
-  //   const addNewResident = async (data) => {
-  //     let res = await insertData("addResident", data);
-  //     if (res) {
-  //       toast.success("Resident added successfully...");
-  //       setMutationInProgress(false);
-  //     } else {
-  //       toast.error("Failed to add new resident!...");
-  //       setMutationInProgress(false);
-  //     }
-  //     console.log(res);
-  //   };
+  const addNewCustomer = async (data) => {
+    let res = await insertData("addCustomer", data);
+    if (res) {
+      toast.success("Customer added successfully...");
+      setMutationInProgress(false);
+    } else {
+      toast.error("Failed to add new Customer!...");
+      setMutationInProgress(false);
+    }
+    console.log(res);
+  };
 
-  //   const updateResident = async (data) => {
-  //     let res = await updateData("updateResident", data);
-  //     if (res) {
-  //       toast.success("Resident updated successfully...");
-  //       setMutationInProgress(false);
-  //     } else {
-  //       toast.error("Failed to update resident!...");
-  //       setMutationInProgress(false);
-  //     }
-  //     console.log(res);
-  //   };
+  const updateCustomer = async (data) => {
+    let res = await updateData("updateCustomer", data);
+    if (res) {
+      toast.success("Customer updated successfully...");
+      setMutationInProgress(false);
+    } else {
+      toast.error("Failed to update Customer!...");
+      setMutationInProgress(false);
+    }
+    console.log(res);
+  };
 
   return (
     <div>
@@ -121,16 +124,16 @@ export default function AddEditCustomers({
               validationSchema={schema}
               onSubmit={(values, r) => {
                 console.log(values);
-                // setMutationInProgress(true);
-                // if (cuisine) {
-                //   updateResident({
-                //     ResidentID: resident.ResidentID,
-                //     ...values,
-                //   });
-                // } else {
-                //   addNewResident(values);
-                //   r.resetForm();
-                // }
+                setMutationInProgress(true);
+                if (customer) {
+                  updateCustomer({
+                    phoneNumber: customer.phoneNumber,
+                    ...values,
+                  });
+                } else {
+                  addNewCustomer(values);
+                  r.resetForm();
+                }
               }}
             >
               {({ values }) => {
