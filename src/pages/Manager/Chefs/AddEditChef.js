@@ -85,25 +85,25 @@ export default function AddEditChef({
     }, {})
   );
 
-  const addNewResident = async (data) => {
-    let res = await insertData("addResident", data);
+  const addNewChef = async (data) => {
+    let res = await insertData("addChef", data);
     if (res) {
-      toast.success("Resident added successfully...");
+      toast.success("Chef added successfully...");
       setMutationInProgress(false);
     } else {
-      toast.error("Failed to add new resident!...");
+      toast.error("Failed to add new chef!...");
       setMutationInProgress(false);
     }
     console.log(res);
   };
 
-  const updateResident = async (data) => {
-    let res = await updateData("updateResident", data);
+  const updateChef = async (data) => {
+    let res = await updateData("updateChef", data);
     if (res) {
-      toast.success("Resident updated successfully...");
+      toast.success("Chef updated successfully...");
       setMutationInProgress(false);
     } else {
-      toast.error("Failed to update resident!...");
+      toast.error("Failed to update chef!...");
       setMutationInProgress(false);
     }
     console.log(res);
@@ -149,12 +149,12 @@ export default function AddEditChef({
                 console.log(values);
                 setMutationInProgress(true);
                 if (chef) {
-                  updateResident({
+                  updateChef({
                     ChefID: chef.ChefID,
                     ...values,
                   });
                 } else {
-                  addNewResident(values);
+                  addNewChef(values);
                   r.resetForm();
                 }
               }}

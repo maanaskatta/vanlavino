@@ -1,57 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BiCategory } from "react-icons/bi";
 import { BsPencil, BsTrash } from "react-icons/bs";
 import { MdAddCircleOutline } from "react-icons/md";
 import Loading from "../../../components/Loading";
 import NoDataText from "../../../components/NoDataText";
 import AddEditCuisine from "./AddEditCuisine";
-
-const fakeCuisines = [
-  {
-    CuisineID: 466868,
-    CuisineName: "Indonesian",
-  },
-  {
-    CuisineID: 78955,
-    CuisineName: "Turkish",
-  },
-  {
-    CuisineID: 32423,
-    CuisineName: "Thai",
-  },
-  {
-    CuisineID: 56533,
-    CuisineName: "Spanish",
-  },
-  {
-    CuisineID: 35656,
-    CuisineName: "Moroccan",
-  },
-  {
-    CuisineID: 5467567,
-    CuisineName: "Japanese",
-  },
-  {
-    CuisineID: 7566,
-    CuisineName: "Indian",
-  },
-];
+import getData from "../RouteControllers/getData";
+import { toast } from "react-toastify";
+import deleteData from "../RouteControllers/deleteData";
 
 const Cuisine = ({ cuisine }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [mutationInProgress, setMutationInProgress] = useState(false);
 
-  //   const deleteGate = async (data) => {
-  //     setMutationInProgress(true);
-  //     let res = await deleteData("deleteAccessGate", data);
-  //     if (res) {
-  //       toast.success("Access gate deleted successfully...");
-  //       setMutationInProgress(false);
-  //     } else {
-  //       toast.error("Failed to delete access gate!...");
-  //       setMutationInProgress(false);
-  //     }
-  //   };
+  const deleteCuisine = async (data) => {
+    setMutationInProgress(true);
+    let res = await deleteData("deleteCuisine", data);
+    if (res) {
+      toast.success("Cuisine deleted successfully...");
+      setMutationInProgress(false);
+    } else {
+      toast.error("Failed to delete Cuisine!...");
+      setMutationInProgress(false);
+    }
+  };
 
   return (
     <div className="flex flex-col gap-3 p-3 border bg-blue-200 rounded shadow-md">
@@ -68,11 +40,11 @@ const Cuisine = ({ cuisine }) => {
           className=" text-blue-900 text-xl cursor-pointer"
         />
         <BsTrash
-          //   onClick={() => {
-          //     deleteGate({
-          //       gateID: gate.gateID,
-          //     });
-          //   }}
+          onClick={() => {
+            deleteCuisine({
+              CuisineID: cuisine.CuisineID,
+            });
+          }}
           className={`text-red-600 text-xl cursor-pointer ${
             mutationInProgress ? " animate-spin" : ""
           }`}
@@ -95,19 +67,20 @@ const Cuisine = ({ cuisine }) => {
 export default function Cuisines({ label }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [cuisines, setCuisines] = useState(fakeCuisines);
+  const [cuisines, setCuisines] = useState(null);
 
-  //   useEffect(() => {
-  //     setIsLoading(true);
-  //     getData("getAccessGates")
-  //       .then((data) => {
-  //         setGates(data);
-  //         setIsLoading(false);
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //       });
-  //   }, [isModalOpen]);
+  useEffect(() => {
+    setIsLoading(true);
+    getData("getCuisines")
+      .then((data) => {
+        setCuisines(data);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error("Failed to load cuisines!...");
+      });
+  }, [isModalOpen]);
 
   return (
     <div className="flex p-4 flex-col gap-10 w-full">

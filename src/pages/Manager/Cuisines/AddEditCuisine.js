@@ -2,7 +2,10 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 import React, { useState } from "react";
 import { MdClose } from "react-icons/md";
 import Modal from "react-modal";
+import { toast } from "react-toastify";
 import * as Yup from "yup";
+import insertData from "../RouteControllers/insertData";
+import updateData from "../RouteControllers/updateData";
 
 const customStyles = {
   content: {
@@ -34,29 +37,29 @@ export default function AddEditCuisine({
     }, {})
   );
 
-  //   const addNewResident = async (data) => {
-  //     let res = await insertData("addResident", data);
-  //     if (res) {
-  //       toast.success("Resident added successfully...");
-  //       setMutationInProgress(false);
-  //     } else {
-  //       toast.error("Failed to add new resident!...");
-  //       setMutationInProgress(false);
-  //     }
-  //     console.log(res);
-  //   };
+  const addNewCuisine = async (data) => {
+    let res = await insertData("addCuisine", data);
+    if (res) {
+      toast.success("Cuisine added successfully...");
+      setMutationInProgress(false);
+    } else {
+      toast.error("Failed to add new cuisine!...");
+      setMutationInProgress(false);
+    }
+    console.log(res);
+  };
 
-  //   const updateResident = async (data) => {
-  //     let res = await updateData("updateResident", data);
-  //     if (res) {
-  //       toast.success("Resident updated successfully...");
-  //       setMutationInProgress(false);
-  //     } else {
-  //       toast.error("Failed to update resident!...");
-  //       setMutationInProgress(false);
-  //     }
-  //     console.log(res);
-  //   };
+  const updateCuisine = async (data) => {
+    let res = await updateData("updateCuisine", data);
+    if (res) {
+      toast.success("Cuisine updated successfully...");
+      setMutationInProgress(false);
+    } else {
+      toast.error("Failed to update cuisine!...");
+      setMutationInProgress(false);
+    }
+    console.log(res);
+  };
 
   return (
     <div>
@@ -95,16 +98,16 @@ export default function AddEditCuisine({
               validationSchema={schema}
               onSubmit={(values, r) => {
                 console.log(values);
-                // setMutationInProgress(true);
-                // if (cuisine) {
-                //   updateResident({
-                //     ResidentID: resident.ResidentID,
-                //     ...values,
-                //   });
-                // } else {
-                //   addNewResident(values);
-                //   r.resetForm();
-                // }
+                setMutationInProgress(true);
+                if (cuisine) {
+                  updateCuisine({
+                    CuisineID: cuisine.CuisineID,
+                    ...values,
+                  });
+                } else {
+                  addNewCuisine(values);
+                  r.resetForm();
+                }
               }}
             >
               {({ values }) => {
