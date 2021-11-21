@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { AiOutlineLoading3Quarters, AiOutlineUser } from "react-icons/ai";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { useHistory } from "react-router-dom";
+import { toast } from "react-toastify";
 
 import Background from "../images/Background.jpg";
 import Logo from "../images/Logo.png";
@@ -16,12 +17,19 @@ export default function LoginPage({ setCurrentRole }) {
   const handleLogin = () => {
     console.log(userName, password);
     setIsLoading(true);
-    setTimeout(() => {
+    if (userName === "admin" && password === "admin") {
+      setTimeout(() => {
+        setIsLoading(false);
+        setCurrentRole("manager");
+        localStorage.setItem("role", "manager");
+        history.push("/manager");
+      }, 2000);
+    } else {
+      toast.error("Invalid login credentials");
+      setUserName("");
+      setPassword("");
       setIsLoading(false);
-      setCurrentRole("manager");
-      localStorage.setItem("role", "manager");
-      history.push("/manager");
-    }, 2000);
+    }
   };
 
   return (
