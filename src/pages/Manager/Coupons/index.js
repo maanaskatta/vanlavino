@@ -15,7 +15,7 @@ import getData from "../RouteControllers/getData";
 import deleteData from "../RouteControllers/deleteData";
 import { toast } from "react-toastify";
 
-const Coupon = ({ coupon }) => {
+const Coupon = ({ coupon, coupons, setCoupons, setIsUpdated }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [mutationInProgress, setMutationInProgress] = useState(false);
 
@@ -24,6 +24,7 @@ const Coupon = ({ coupon }) => {
     let res = await deleteData("deleteCoupon", data);
     if (res) {
       toast.success("Coupon deleted successfully...");
+      setCoupons(coupons.filter((item) => item.CouponID !== coupon.CouponID));
       setMutationInProgress(false);
     } else {
       toast.error("Failed to delete Coupon!...");
@@ -77,6 +78,7 @@ const Coupon = ({ coupon }) => {
           isModalOpen={isModalOpen}
           setIsModalOpen={setIsModalOpen}
           coupon={coupon}
+          setIsUpdated={setIsUpdated}
         />
       ) : (
         <></>
@@ -89,6 +91,7 @@ export default function Coupons({ label }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [coupons, setCoupons] = useState(null);
+  const [isUpdated, setIsUpdated] = useState(0);
 
   useEffect(() => {
     setIsLoading(true);
@@ -100,7 +103,7 @@ export default function Coupons({ label }) {
       .catch((err) => {
         console.log(err);
       });
-  }, [isModalOpen]);
+  }, [isModalOpen, isUpdated]);
 
   return (
     <div className="flex p-4 flex-col gap-10 w-full">
@@ -122,7 +125,12 @@ export default function Coupons({ label }) {
       ) : coupons && coupons.length > 0 ? (
         <div className="grid grid-cols-5 gap-3">
           {coupons.map((coupon) => (
-            <Coupon coupon={coupon} />
+            <Coupon
+              coupon={coupon}
+              coupons={coupons}
+              setCoupons={setCoupons}
+              setIsUpdated={setIsUpdated}
+            />
           ))}
         </div>
       ) : (

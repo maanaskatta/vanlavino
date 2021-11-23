@@ -16,7 +16,12 @@ const customStyles = {
   },
 };
 
-export default function AddEditItem({ isModalOpen, setIsModalOpen, item }) {
+export default function AddEditItem({
+  isModalOpen,
+  setIsModalOpen,
+  item,
+  setIsUpdated,
+}) {
   const [mutationInProgress, setMutationInProgress] = useState(false);
   const [cuisines, setCuisines] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -86,6 +91,7 @@ export default function AddEditItem({ isModalOpen, setIsModalOpen, item }) {
     let res = await updateData("updateItem", data);
     if (res) {
       toast.success("Item updated successfully...");
+      setIsUpdated(Math.random());
       setMutationInProgress(false);
     } else {
       toast.error("Failed to update Item!...");

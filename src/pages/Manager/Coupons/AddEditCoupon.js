@@ -14,7 +14,12 @@ const customStyles = {
   },
 };
 
-export default function AddEditCoupon({ isModalOpen, setIsModalOpen, coupon }) {
+export default function AddEditCoupon({
+  isModalOpen,
+  setIsModalOpen,
+  coupon,
+  setIsUpdated,
+}) {
   const [mutationInProgress, setMutationInProgress] = useState(false);
 
   const itemFieldKeys = [
@@ -65,6 +70,7 @@ export default function AddEditCoupon({ isModalOpen, setIsModalOpen, coupon }) {
     let res = await updateData("updateCoupon", data);
     if (res) {
       toast.success("Coupon updated successfully...");
+      setIsUpdated(Math.random());
       setMutationInProgress(false);
     } else {
       toast.error("Failed to update Coupon!...");

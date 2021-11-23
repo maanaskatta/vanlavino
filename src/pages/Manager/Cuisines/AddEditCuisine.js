@@ -17,6 +17,7 @@ export default function AddEditCuisine({
   isModalOpen,
   setIsModalOpen,
   cuisine,
+  setIsUpdated,
 }) {
   const [mutationInProgress, setMutationInProgress] = useState(false);
 
@@ -53,6 +54,7 @@ export default function AddEditCuisine({
     let res = await updateData("updateCuisine", data);
     if (res) {
       toast.success("Cuisine updated successfully...");
+      setIsUpdated(Math.random());
       setMutationInProgress(false);
     } else {
       toast.error("Failed to update cuisine!...");

@@ -14,7 +14,12 @@ const customStyles = {
   },
 };
 
-export default function AddEditEvent({ isModalOpen, setIsModalOpen, event }) {
+export default function AddEditEvent({
+  isModalOpen,
+  setIsModalOpen,
+  event,
+  setIsUpdated,
+}) {
   const [mutationInProgress, setMutationInProgress] = useState(false);
 
   const fieldKeys = [
@@ -60,6 +65,7 @@ export default function AddEditEvent({ isModalOpen, setIsModalOpen, event }) {
     let res = await updateData("updateEvent", data);
     if (res) {
       toast.success("Event updated successfully...");
+      setIsUpdated(Math.random());
       setMutationInProgress(false);
     } else {
       toast.error("Failed to update Event!...");

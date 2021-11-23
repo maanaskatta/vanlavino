@@ -18,7 +18,7 @@ const fakeEvents = [
   },
 ];
 
-const Event = ({ event }) => {
+const Event = ({ event, events, setEvents, setIsUpdated }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [mutationInProgress, setMutationInProgress] = useState(false);
 
@@ -29,6 +29,7 @@ const Event = ({ event }) => {
     let res = await deleteData("deleteEvent", data);
     if (res) {
       toast.success("Event deleted successfully...");
+      setEvents(events.filter((item) => item.eventID !== event.eventID));
       setMutationInProgress(false);
     } else {
       toast.error("Failed to delete Event!...");
@@ -77,6 +78,7 @@ const Event = ({ event }) => {
           isModalOpen={isModalOpen}
           setIsModalOpen={setIsModalOpen}
           event={event}
+          setIsUpdated={setIsUpdated}
         />
       ) : (
         <></>
@@ -89,6 +91,7 @@ export default function Events({ label }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [events, setEvents] = useState(fakeEvents);
+  const [isUpdated, setIsUpdated] = useState(0);
 
   useEffect(() => {
     setIsLoading(true);
@@ -100,7 +103,7 @@ export default function Events({ label }) {
       .catch((err) => {
         console.log(err);
       });
-  }, [isModalOpen]);
+  }, [isModalOpen, isUpdated]);
 
   return (
     <div className="flex p-4 flex-col gap-10 w-full">
@@ -122,7 +125,12 @@ export default function Events({ label }) {
       ) : events && events.length > 0 ? (
         <div className="grid grid-cols-5 gap-3">
           {events.map((event) => (
-            <Event event={event} />
+            <Event
+              event={event}
+              events={events}
+              setEvents={setEvents}
+              setIsUpdated={setIsUpdated}
+            />
           ))}
         </div>
       ) : (

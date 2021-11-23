@@ -9,7 +9,7 @@ import getData from "../RouteControllers/getData";
 import { toast } from "react-toastify";
 import deleteData from "../RouteControllers/deleteData";
 
-const Cuisine = ({ cuisine }) => {
+const Cuisine = ({ cuisine, cuisines, setCuisines, setIsUpdated }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [mutationInProgress, setMutationInProgress] = useState(false);
 
@@ -18,6 +18,9 @@ const Cuisine = ({ cuisine }) => {
     let res = await deleteData("deleteCuisine", data);
     if (res) {
       toast.success("Cuisine deleted successfully...");
+      setCuisines(
+        cuisines.filter((item) => item.CuisineID !== cuisine.CuisineID)
+      );
       setMutationInProgress(false);
     } else {
       toast.error("Failed to delete Cuisine!...");
@@ -56,6 +59,7 @@ const Cuisine = ({ cuisine }) => {
           isModalOpen={isModalOpen}
           setIsModalOpen={setIsModalOpen}
           cuisine={cuisine}
+          setIsUpdated={setIsUpdated}
         />
       ) : (
         <></>
@@ -68,6 +72,7 @@ export default function Cuisines({ label }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [cuisines, setCuisines] = useState(null);
+  const [isUpdated, setIsUpdated] = useState(0);
 
   useEffect(() => {
     setIsLoading(true);
@@ -80,7 +85,7 @@ export default function Cuisines({ label }) {
         console.log(err);
         toast.error("Failed to load cuisines!...");
       });
-  }, [isModalOpen]);
+  }, [isModalOpen, isUpdated]);
 
   return (
     <div className="flex p-4 flex-col gap-10 w-full">
@@ -102,7 +107,12 @@ export default function Cuisines({ label }) {
       ) : cuisines && cuisines.length > 0 ? (
         <div className="grid grid-cols-5 gap-3">
           {cuisines.map((cuisine) => (
-            <Cuisine cuisine={cuisine} />
+            <Cuisine
+              cuisine={cuisine}
+              setIsUpdated={setIsUpdated}
+              cuisines={cuisines}
+              setCuisines={setCuisines}
+            />
           ))}
         </div>
       ) : (

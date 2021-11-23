@@ -23,7 +23,7 @@ const fakeMenu = [
   },
 ];
 
-const Items = ({ item }) => {
+const Items = ({ item, menu, setMenu, setIsUpdated }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [mutationInProgress, setMutationInProgress] = useState(false);
 
@@ -32,6 +32,7 @@ const Items = ({ item }) => {
     let res = await deleteData("deleteItem", data);
     if (res) {
       toast.success("Item deleted successfully...");
+      setMenu((el) => el.ItemID !== item.ItemID);
       setMutationInProgress(false);
     } else {
       toast.error("Failed to delete Item!...");
@@ -80,6 +81,7 @@ const Items = ({ item }) => {
           isModalOpen={isModalOpen}
           setIsModalOpen={setIsModalOpen}
           item={item}
+          setIsUpdated={setIsUpdated}
         />
       ) : (
         <></>
@@ -92,6 +94,7 @@ export default function Menu({ label }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [menu, setMenu] = useState(fakeMenu);
+  const [isUpdated, setIsUpdated] = useState(0);
 
   useEffect(() => {
     setIsLoading(true);
@@ -103,7 +106,7 @@ export default function Menu({ label }) {
       .catch((err) => {
         console.log(err);
       });
-  }, [isModalOpen]);
+  }, [isModalOpen, isUpdated]);
 
   return (
     <div className="flex p-4 flex-col gap-10 w-full">
@@ -125,7 +128,12 @@ export default function Menu({ label }) {
       ) : menu && menu.length > 0 ? (
         <div className="grid grid-cols-5 gap-3">
           {menu.map((item) => (
-            <Items item={item} />
+            <Items
+              item={item}
+              menu={menu}
+              setMenu={setMenu}
+              setIsUpdated={setIsUpdated}
+            />
           ))}
         </div>
       ) : (
